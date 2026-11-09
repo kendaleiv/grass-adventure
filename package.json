@@ -1,0 +1,17 @@
+{
+  "name": "grass-adventure",
+  "version": "1.0.0",
+  "description": "A touch-friendly pixel-art browser adventure",
+  "private": true,
+  "main": "engine.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kendaleiv/grass-adventure"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
