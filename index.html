@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#132c26">
+  <meta name="description" content="A little hero. A very big adventure. Explore six pixel-art dungeons in a free, touch-friendly browser game.">
+  <title>Grass Adventure</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231b3229'/%3E%3Crect x='5' y='2' width='6' height='4' fill='%23edc85b'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e7bd83'/%3E%3Crect x='3' y='10' width='10' height='5' fill='%2373a84c'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="engine.js" defer></script>
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Grass Adventure home"><span class="brand-icon">✦</span><span>GRASS<span class="brand-sub">ADVENTURE</span></span></a>
+      <span class="tagline">A little hero. A very big adventure.</span>
+      <nav aria-label="Game options">
+        <button id="help" class="icon-button" aria-label="How to play">?</button>
+        <button id="pause" class="icon-button" aria-label="Pause game">Ⅱ</button>
+        <button id="fullscreen" class="icon-button" aria-label="Toggle fullscreen"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="game-column" aria-label="Adventure">
+        <div class="hud">
+          <div><span class="eyebrow">YOUR HERO</span><div id="hearts" class="hearts" aria-label="3 of 3 hearts">♥ ♥ ♥</div></div>
+          <div class="hud-stats"><span><i class="gem">◆</i> <b id="rupees">0</b></span><span class="timer" id="timer">00:00</span></div>
+          <div class="location"><span class="eyebrow">EXPLORING</span><strong id="location">Willowfield</strong></div>
+        </div>
+        <div class="viewport">
+          <canvas id="game" width="768" height="480" tabindex="0" aria-label="Top-down adventure. Move with arrow keys or the touch stick; use the buttons below to act."></canvas>
+          <div class="area-label"><span class="live-dot"></span><span id="area-label">WILLOWFIELD · OVERWORLD</span></div>
+          <button id="map-toggle" class="map-toggle" aria-label="Show adventure map">◇ MAP</button>
+          <div id="toast" class="toast" role="status" aria-live="polite"></div>
+          <div id="danger" class="danger-warning" role="status" hidden>⚡ Lightning charging — jump or shield!</div>
+          <div id="prompt" class="interact-prompt" hidden></div>
+        </div>
+        <div class="control-deck">
+          <div id="joystick" class="joystick" aria-label="Touch movement stick">
+            <span class="stick-guides">✥</span><span id="stick" class="stick"></span>
+          </div>
+          <div class="control-hint"><strong>GO EXPLORE.</strong><span>Find a friend. Borrow a sword.<br>Make a little trouble.</span></div>
+          <div class="action-buttons">
+            <button id="interact" class="action small"><span>✦</span><b>TALK</b><kbd>E</kbd></button>
+            <button id="shield" class="action small"><span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 4Q12 1 20 4v8q0 6-8 10-8-4-8-10Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 5v12M7 10h10" stroke="currentColor" stroke-width="2"/></svg></span><b>SHIELD</b><kbd>C</kbd></button>
+            <button id="jump" class="action small"><span>↟</span><b>JUMP</b><kbd>Space</kbd></button>
+            <button id="attack" class="action sword"><span>⚔</span><b>SWORD</b><kbd>X</kbd></button>
+            <button id="bomb" class="action small bomb"><span>●</span><b id="bomb-count">BOMB · 0</b><kbd>B</kbd></button>
+          </div>
+        </div>
+        <div class="bottom-note"><span><span class="live-dot"></span> Progress saved on this device</span><span>WASD / arrows to move · E to interact</span></div>
+      </section>
+
+      <aside id="journal" class="journal">
+        <div class="journal-heading"><span class="eyebrow">THE ADVENTURE JOURNAL</span><button id="map-close" class="text-button journal-close" aria-label="Close adventure map">CLOSE ×</button><span>✧</span></div>
+        <h1>Beyond the<br><em>tall grass.</em></h1>
+        <p class="journal-intro">Six lost seals. One brave explorer.<br>A world full of little secrets.</p>
+        <div class="quest-card"><span class="eyebrow">YOUR NEXT QUEST</span><h2 id="quest-title">A sword to start</h2><p id="quest-text">Visit Mr. Hawthorn in the village's red-roofed house. Every adventure starts with a hello.</p></div>
+        <div class="map-card"><div class="map-title"><span class="eyebrow">WILLOWFIELD</span><span id="seal-count">0 / 6 seals</span></div><canvas id="minimap" width="240" height="160" aria-label="Overworld map with your position and numbered dungeon entrances"></canvas><p>◆ You &nbsp; ● Village &nbsp; 1–6 Dungeons</p></div>
+        <ol id="dungeon-list" class="dungeon-list"></ol>
+        <div class="inventory"><span class="eyebrow">IN YOUR SATCHEL</span><p id="inventory">A hopeful heart. That's a start.</p></div>
+        <p class="journal-footer">Made from a child's imagination.<br>Built for adventurers of every age.</p>
+      </aside>
+    </main>
+    <footer>GRASS ADVENTURE <span>✦</span> A tiny world with a big heart. <a href="LICENSE">MIT licensed</a></footer>
+  </div>
+
+  <dialog id="welcome">
+    <div class="dialog-art" aria-hidden="true"><span>✦</span> 🌿 <span>✦</span></div>
+    <span class="eyebrow">WELCOME TO WILLOWFIELD</span>
+    <h2>Your adventure<br>starts <em>here.</em></h2>
+    <p>Meet friendly villagers, find your sword, and recover six seals from the dungeons. Something spiky is waiting at Stormkeep…</p>
+    <form id="start-form">
+      <label for="hero-name">WHAT SHALL WE CALL YOU?</label>
+      <input id="hero-name" name="hero" maxlength="16" placeholder="Your hero's name" value="Sprout" autocomplete="off">
+      <button type="submit" class="primary" id="start-button">LET'S ADVENTURE <span>→</span></button>
+    </form>
+    <p class="dialog-tip">Touch stick to move · Sword to swing · Jump to hop<br>Keyboard? WASD / arrows, X, Space, E, C, B.</p>
+    <button id="fresh-start" class="text-button" hidden>Start a new adventure instead</button>
+  </dialog>
+
+  <dialog id="info">
+    <span class="eyebrow" id="info-kicker">A LITTLE HELP</span>
+    <h2 id="info-title">The explorer's guide</h2>
+    <div id="info-content"></div>
+    <div id="shop-actions" class="shop-actions" hidden>
+      <button data-buy="shield">Wood shield · 20 ◆</button>
+      <button data-buy="potion">Refill hearts · 10 ◆</button>
+      <button data-buy="bombs">100 bombs · 100 ◆</button>
+    </div>
+    <button id="info-close" class="primary">BACK TO ADVENTURE →</button>
+    <button id="restart" class="text-button" hidden>Start a completely new adventure</button>
+  </dialog>
+  <noscript>This adventure needs JavaScript enabled to play.</noscript>
+</body>
+</html>
