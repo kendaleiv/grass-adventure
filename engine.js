@@ -355,7 +355,7 @@
             for (const spread of e.boss ? [-.35, 0, .35] : [0]) this.projectiles.push({ type: e.type === 'octopus' ? 'acorn' : 'bolt', x: e.x, y: e.y, vx: Math.cos(angle + spread) * 125, vy: Math.sin(angle + spread) * 125, life: 3, damage: e.type === 'boss' ? 2 : 1 });
             e.cooldown = e.boss ? 3.2 : 3;
           }
-        } else if ((e.type === 'dino' || e.boss) && dist < 320 && e.cooldown <= 0) e.charge = 1;
+        } else if ((e.type === 'dino' || e.boss) && dist < 180 && e.cooldown <= 0) e.charge = 1;
         if (!e.boss && dist < 180 && dist > 20 && e.charge <= 0) this.move(e, (p.x - e.x) / dist * dt * 35, (p.y - e.y) / dist * dt * 35);
         if (dist < (e.boss ? 25 : 19)) this.damage(1, e.type);
       }

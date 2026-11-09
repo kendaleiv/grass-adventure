@@ -21,7 +21,7 @@ Visit `http://localhost:8000`. No install or build is needed.
 - **Shield:** hold C or SHIELD. Wooden shields break against skeletons; the Frozen Shield does not.
 - **Bomb:** B or BOMB. The village shop sells 100 bombs for 100 rupees.
 - **Fullscreen:** use ⛶. Browsers without the Fullscreen API can use an added-to-Home-Screen view instead.
-- **Pause / guide:** use Ⅱ or ? in the header. Opening a conversation also pauses the game.
+- **Pause / guide:** use Ⅱ or ? in the header. Opening a conversation or the mobile map also pauses the game.
 
 Explore Willowfield, its houses, shop, and apple-shooting arcade. Break pots and defeat monsters for rupees. Recover seals in six ordered dungeons: Mossroot Ruins, The Icy Road, Bramble Labyrinth, Sunken Pipes, Ember Ladder, and Stormkeep. Every dungeon has a hidden brass key, guardian, and heart container. The first two grant an Ice Sword and Frozen Shield; the fourth grants swimming fins. Safe bridges and ladders always provide an alternative to dangerous crossings.
 
@@ -42,12 +42,6 @@ Uses Node's built-in test runner (Node 18+), without external packages. Tests co
 ## Deployment
 
 Like [Porcupine Spikey](https://github.com/kendaleiv/porcupine-spikey), `.github/workflows/deploy.yml` publishes the repository directly to GitHub Pages on pushes to `main` or manual dispatch. Set **Settings → Pages → Source** to **GitHub Actions**. No build step or hosting service is required.
-
-## Interpreting the child's prompt
-
-Approximately **80% of the understandable ideas** are represented: the yellow-haired green-clad hero, sword-giving villager, large scrolling overworld, six dungeons (including three grassy settings across the overworld/ruins/garden), ice and lava, jumping circles, bridges and ladders, swimming, skeletons, pop-up-style slimes, spiky electric dinosaur, octopus guardians, readable signs, houses and breakable pots, rupees, bombs, ice gear, heart containers, arcade targets, clocks, a special name, and a secret final-battle shortcut.
-
-This is an estimate of recognizable ideas, not a word-by-word measure. Contradictory dungeon counts were resolved to six. Unclear fragments were omitted, while realistic horror, unavoidable instant deaths, ten-heart attacks, permanent game-over, and ten-minute play bans were softened into friendly monsters, readable attacks, and immediate retries. The result is meant to be tricky, consistent, and possible to win.
 
 ## License
 

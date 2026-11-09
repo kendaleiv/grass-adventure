@@ -260,6 +260,18 @@ test('lightning has a visible warning before projectiles appear', () => {
   assert.ok(g.player.hp > 0, 'warning gives time to react');
 });
 
+test('distant guardians do not fire before the hero can see their warning', () => {
+  const g = new Game();
+  g.player.sword = true;
+  g.enterDungeon(6, true);
+  const boss = g.enemies.find(e => e.boss);
+  Object.assign(g.player, point(17, 6));
+  boss.cooldown = 0;
+  g.tick(.02);
+  assert.equal(boss.charge, 0);
+  assert.equal(g.projectiles.length, 0);
+});
+
 test('every dungeon has a traversable route from entry to key and guardian', () => {
   for (let id = 1; id <= DUNGEONS.length; id++) {
     const g = new Game();

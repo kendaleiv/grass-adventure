@@ -68,7 +68,7 @@
     }
     updateHUD();
   }
-  function active() { return started && !paused && !document.hidden && !$('info').open && !$('welcome').open; }
+  function active() { return started && !paused && !document.hidden && !$('info').open && !$('welcome').open && !$('journal').classList.contains('open'); }
   function action(fn) {
     if (!active()) return;
     game[fn]();
@@ -97,7 +97,7 @@
     updateHUD();
     save();
     if (game.mode === 'won') dialog('Welcome back, hero!', 'Willowfield is safe. Your seals and equipment are waiting. Keep exploring!', 'win');
-    else showToast(`Welcome, ${game.name}! Visit the red-roofed house to get your sword.`);
+    else showToast(game.player.sword ? `Welcome back, ${game.name}! Your equipment and seals are safe.` : `Welcome, ${game.name}! Visit the red-roofed house to get your sword.`);
     canvas.focus({ preventScroll: true });
   }
   $('start-form').addEventListener('submit', e => { e.preventDefault(); start(); });
@@ -138,11 +138,15 @@
     $('fullscreen').setAttribute('aria-label', document.fullscreenElement ? 'Exit fullscreen' : 'Toggle fullscreen');
     resize();
   });
-  $('map-toggle').addEventListener('click', () => {
-    const open = $('journal').classList.toggle('open');
+  function toggleMap(open) {
+    $('journal').classList.toggle('open', open);
+    clearInput();
     $('map-toggle').setAttribute('aria-expanded', String(open));
     if (open) $('journal').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+    else canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  $('map-toggle').addEventListener('click', () => toggleMap(!$('journal').classList.contains('open')));
+  $('map-close').addEventListener('click', () => toggleMap(false));
   document.querySelectorAll('[data-buy]').forEach(button => button.addEventListener('click', () => {
     game.buy(button.dataset.buy);
     events();
@@ -231,6 +235,10 @@
     const next = DUNGEONS.findIndex((_, i) => !game.completed.includes(i + 1));
     $('quest-title').textContent = !p.sword ? 'A sword to start' : next < 0 ? 'A world of little secrets' : typeof game.room === 'number' ? game.key ? 'Face the guardian' : 'Find the brass key' : `Seal ${next + 1}: ${DUNGEONS[next].name}`;
     $('quest-text').textContent = !p.sword ? "Visit Mr. Hawthorn in the village's red-roofed house. Every adventure starts with a hello." : typeof game.room === 'number' ? game.key ? 'The gates are open. Defeat the guardian in the northeast chamber, then touch its glowing seal.' : DUNGEONS[game.room - 1].hint : next < 0 ? 'Willowfield is safe! Visit the arcade, explore the houses, and find the curious wall in the southeast.' : `Find entrance ${next + 1} on your map. ${DUNGEONS[next].hint}`;
+    if (typeof game.room === 'number' && game.completed.includes(game.room)) {
+      $('quest-title').textContent = 'Seal recovered!';
+      $('quest-text').textContent = 'The guardian is resting. Return to the doorway in the southwest to keep exploring Willowfield.';
+    }
     $('dungeon-list').replaceChildren();
     DUNGEONS.forEach((d, i) => {
       const li = document.createElement('li'), n = document.createElement('span'), title = document.createElement('span'), status = document.createElement('span');
@@ -475,8 +483,8 @@
   }
   function render() {
     const p = game.player, w = canvas.width, h = canvas.height;
-    camera.x = Math.round(Math.max(0, Math.min(game.width * TILE - w, p.x - w / 2)));
-    camera.y = Math.round(Math.max(0, Math.min(game.height * TILE - h, p.y - h / 2)));
+    camera.x = Math.round(game.width * TILE < w ? (game.width * TILE - w) / 2 : Math.max(0, Math.min(game.width * TILE - w, p.x - w / 2)));
+    camera.y = Math.round(game.height * TILE < h ? (game.height * TILE - h) / 2 : Math.max(0, Math.min(game.height * TILE - h, p.y - h / 2)));
     rect(0, 0, w, h, '#304a32');
     const x0 = Math.max(0, Math.floor(camera.x / TILE) - 2), y0 = Math.max(0, Math.floor(camera.y / TILE) - 2);
     const x1 = Math.min(game.width, Math.ceil((camera.x + w) / TILE) + 2), y1 = Math.min(game.height, Math.ceil((camera.y + h) / TILE) + 3);
@@ -552,9 +560,10 @@
       const near = game.nearObject();
       $('prompt').hidden = !near;
       if (near) $('prompt').textContent = `✦ ${near.label || 'Read sign'} · TALK / E`;
+      $('danger').hidden = !game.enemies.some(e => e.hp > 0 && e.charge > 0 && distance(e, game.player) < 200);
       saveTime += dt;
       if (saveTime > 10) { save(); saveTime = 0; }
-    } else $('prompt').hidden = true;
+    } else { $('prompt').hidden = true; $('danger').hidden = true; }
     if (time > toastUntil) $('toast').classList.remove('visible');
     const seconds = Math.floor(game.elapsed);
     $('timer').textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;

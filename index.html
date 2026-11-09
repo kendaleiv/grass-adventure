@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#132c26">
   <meta name="description" content="A little hero. A very big adventure. Explore six pixel-art dungeons in a free, touch-friendly browser game.">
   <title>Grass Adventure</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231b3229'/%3E%3Crect x='5' y='2' width='6' height='4' fill='%23edc85b'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e7bd83'/%3E%3Crect x='3' y='10' width='10' height='5' fill='%2373a84c'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
   <script src="engine.js" defer></script>
   <script src="game.js" defer></script>
@@ -34,6 +35,7 @@
           <div class="area-label"><span class="live-dot"></span><span id="area-label">WILLOWFIELD · OVERWORLD</span></div>
           <button id="map-toggle" class="map-toggle" aria-label="Show adventure map">◇ MAP</button>
           <div id="toast" class="toast" role="status" aria-live="polite"></div>
+          <div id="danger" class="danger-warning" role="status" hidden>⚡ Lightning charging — jump or shield!</div>
           <div id="prompt" class="interact-prompt" hidden></div>
         </div>
         <div class="control-deck">
@@ -53,7 +55,7 @@
       </section>
 
       <aside id="journal" class="journal">
-        <div class="journal-heading"><span class="eyebrow">THE ADVENTURE JOURNAL</span><span>✧</span></div>
+        <div class="journal-heading"><span class="eyebrow">THE ADVENTURE JOURNAL</span><button id="map-close" class="text-button journal-close" aria-label="Close adventure map">CLOSE ×</button><span>✧</span></div>
         <h1>Beyond the<br><em>tall grass.</em></h1>
         <p class="journal-intro">Six lost seals. One brave explorer.<br>A world full of little secrets.</p>
         <div class="quest-card"><span class="eyebrow">YOUR NEXT QUEST</span><h2 id="quest-title">A sword to start</h2><p id="quest-text">Visit Mr. Hawthorn in the village's red-roofed house. Every adventure starts with a hello.</p></div>
