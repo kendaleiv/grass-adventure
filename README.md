@@ -45,4 +45,4 @@ Like [Porcupine Spikey](https://github.com/kendaleiv/porcupine-spikey), `.github
 
 ## License
 
-MIT — see [LICENSE](LICENSE). All game artwork is original procedural pixel art drawn in the browser.
+MIT — see [LICENSE](LICENSE).
